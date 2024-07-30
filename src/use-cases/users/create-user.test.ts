@@ -3,7 +3,7 @@ import { it, describe, expect, vi } from 'vitest'
 import { CreateUserUseCase } from './create-user'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { compare } from 'bcryptjs'
-import { EmailAlreadyExistsError } from '@/errors/users/EmailAlreadyExists'
+import { EmailAlreadyExistsError } from '@/errors/users/email-already-exists'
 
 describe('CreateUserUseCase', () => {
   const makeSut = () => {

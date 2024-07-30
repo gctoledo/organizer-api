@@ -1,4 +1,4 @@
-import { EmailAlreadyExistsError } from '@/errors/users/EmailAlreadyExists'
+import { EmailAlreadyExistsError } from '@/errors/users/email-already-exists'
 import { ICrypto } from '@/helpers/crypto'
 import { UserRepository } from '@/repositories/interfaces/users-repository'
 import { User } from '@prisma/client'
@@ -8,6 +8,10 @@ interface CreateUserUseCaseParams {
   last_name: string
   password: string
   email: string
+}
+
+interface CreateUserUseCaseResponse {
+  user: User
 }
 
 export class CreateUserUseCase {
@@ -21,7 +25,7 @@ export class CreateUserUseCase {
     first_name,
     last_name,
     password,
-  }: CreateUserUseCaseParams): Promise<User> {
+  }: CreateUserUseCaseParams): Promise<CreateUserUseCaseResponse> {
     const emailAlreadyExists = await this.userRepository.findByEmail(email)
 
     if (emailAlreadyExists) {
@@ -37,6 +41,6 @@ export class CreateUserUseCase {
       password: hashedPassword,
     })
 
-    return user
+    return { user }
   }
 }
