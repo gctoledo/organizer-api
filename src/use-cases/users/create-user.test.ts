@@ -11,7 +11,7 @@ describe('CreateUserUseCase', () => {
 
     const userRepository = new InMemoryUserRepository()
 
-    const sut = new CreateUserUseCase(crypto, userRepository)
+    const sut = new CreateUserUseCase(userRepository, crypto)
 
     return { crypto, userRepository, sut }
   }
@@ -21,14 +21,14 @@ describe('CreateUserUseCase', () => {
 
     const spy = vi.spyOn(crypto, 'hash')
 
-    const result = await sut.execute({
+    const { user } = await sut.execute({
       email: 'john@doe.com',
       first_name: 'John',
       last_name: 'Doe',
       password: 'password',
     })
 
-    const hashedPassword = await compare('password', result.password)
+    const hashedPassword = await compare('password', user.password)
 
     expect(spy).toHaveBeenCalledWith('password')
     expect(hashedPassword).toBe(true)

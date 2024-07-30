@@ -16,8 +16,8 @@ interface CreateUserUseCaseResponse {
 
 export class CreateUserUseCase {
   constructor(
-    private crypto: ICrypto,
     private userRepository: UserRepository,
+    private crypto: ICrypto,
   ) {}
 
   async execute({

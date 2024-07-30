@@ -15,16 +15,16 @@ describe('GetProfileUseCase', () => {
   it('should be able to get profile', async () => {
     const { sut, userRepository } = makeSut()
 
-    const user = await userRepository.create({
+    const createdUser = await userRepository.create({
       email: 'john@doe.com',
       first_name: 'John',
       last_name: 'Doe',
       password: 'password',
     })
 
-    const result = await sut.execute(user.id)
+    const { user } = await sut.execute(createdUser.id)
 
-    expect(result).toEqual(user)
+    expect(user).toEqual(createdUser)
   })
 
   it('should not be able to get profile if user does not exists', async () => {
