@@ -3,6 +3,7 @@ import { it, describe, expect, vi } from 'vitest'
 import { CreateUserUseCase } from './create-user'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { compare } from 'bcryptjs'
+import { EmailAlreadyExistsError } from '@/errors/users/EmailAlreadyExists'
 
 describe('CreateUserUseCase', () => {
   const makeSut = () => {
@@ -31,5 +32,25 @@ describe('CreateUserUseCase', () => {
 
     expect(spy).toHaveBeenCalledWith('password')
     expect(hashedPassword).toBe(true)
+  })
+
+  it('should not be able to create user if email already exists', async () => {
+    const { sut, userRepository } = makeSut()
+
+    await userRepository.create({
+      email: 'john@doe.com',
+      first_name: 'John',
+      last_name: 'Doe',
+      password: 'password',
+    })
+
+    const result = sut.execute({
+      email: 'john@doe.com',
+      first_name: 'John',
+      last_name: 'Doe',
+      password: 'password',
+    })
+
+    expect(result).rejects.toThrow(EmailAlreadyExistsError)
   })
 })
