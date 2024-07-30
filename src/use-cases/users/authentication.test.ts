@@ -55,4 +55,22 @@ describe('AuthenticationUseCase', () => {
 
     expect(promise).rejects.toBeInstanceOf(InvalidCredentialsError)
   })
+
+  it('should not be able to authenticate with wrong password', async () => {
+    const { sut, crypto, userRepository } = makeSut()
+
+    await userRepository.create({
+      email: 'john@doe.com',
+      first_name: 'John',
+      last_name: 'Doe',
+      password: await crypto.hash('password'),
+    })
+
+    const promise = sut.execute({
+      email: 'john@doe.com',
+      password: 'invalid_password',
+    })
+
+    expect(promise).rejects.toBeInstanceOf(InvalidCredentialsError)
+  })
 })
