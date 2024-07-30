@@ -3,6 +3,7 @@ import { it, describe, expect } from 'vitest'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 
 import { AuthenticationUseCase } from './authentication'
+import { InvalidCredentialsError } from '@/errors/users/invalid-credentials'
 
 describe('AuthenticationUseCase', () => {
   const makeSut = () => {
@@ -35,5 +36,23 @@ describe('AuthenticationUseCase', () => {
         email: 'john@doe.com',
       }),
     )
+  })
+
+  it('should not be able to authenticate with wrong email', async () => {
+    const { sut, crypto, userRepository } = makeSut()
+
+    await userRepository.create({
+      email: 'john@doe.com',
+      first_name: 'John',
+      last_name: 'Doe',
+      password: await crypto.hash('password'),
+    })
+
+    const promise = sut.execute({
+      email: 'invalid_email',
+      password: 'password',
+    })
+
+    expect(promise).rejects.toBeInstanceOf(InvalidCredentialsError)
   })
 })
