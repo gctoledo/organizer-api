@@ -44,13 +44,13 @@ describe('CreateUserUseCase', () => {
       password: 'password',
     })
 
-    const result = sut.execute({
+    const promise = sut.execute({
       email: 'john@doe.com',
       first_name: 'John',
       last_name: 'Doe',
       password: 'password',
     })
 
-    expect(result).rejects.toThrow(EmailAlreadyExistsError)
+    expect(promise).rejects.toThrow(EmailAlreadyExistsError)
   })
 })
