@@ -5,7 +5,17 @@ import { randomUUID } from 'node:crypto'
 export class InMemoryUserRepository implements UserRepository {
   private users: User[] = []
 
-  async findByEmail(email: string): Promise<User | null> {
+  async findById(id: string) {
+    const user = this.users.find((user) => user.id === id)
+
+    if (!user) {
+      return null
+    }
+
+    return user
+  }
+
+  async findByEmail(email: string) {
     const user = this.users.find((user) => user.email === email)
 
     if (!user) {
