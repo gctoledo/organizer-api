@@ -3,6 +3,7 @@ import { CreateTripUseCase } from './create-trip'
 import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trips-repository'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
+import { InvalidDateError } from '@/errors/trips/invalid-date'
 
 describe('CreateTripUseCase', () => {
   const makeSut = () => {
@@ -51,5 +52,26 @@ describe('CreateTripUseCase', () => {
       ]),
     )
     expect(trip.is_confirmed).toEqual(false)
+  })
+
+  it('should not be able to create trip if start date is after ends date', async () => {
+    const { sut, usersRepository } = makeSut()
+
+    const user = await usersRepository.create({
+      email: 'john@doe.com',
+      first_name: 'John',
+      last_name: 'Doe',
+      password: 'password',
+    })
+
+    const promise = sut.execute({
+      destination: 'New York',
+      starts_at: new Date('2030-05-15T00:00:00.000Z'),
+      ends_at: new Date('2030-04-15T00:00:00.000Z'),
+      owner_id: user.id,
+      participants_to_invite: ['albert@doe.com', 'robert@doe.com'],
+    })
+
+    expect(promise).rejects.toBeInstanceOf(InvalidDateError)
   })
 })
