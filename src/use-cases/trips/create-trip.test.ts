@@ -41,7 +41,7 @@ describe('CreateTripUseCase', () => {
     expect(participants).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          email: 'john@doe.com',
+          email: user.email,
         }),
         expect.objectContaining({
           email: 'albert@doe.com',
@@ -68,6 +68,27 @@ describe('CreateTripUseCase', () => {
       destination: 'New York',
       starts_at: new Date('2030-05-15T00:00:00.000Z'),
       ends_at: new Date('2030-04-15T00:00:00.000Z'),
+      owner_id: user.id,
+      participants_to_invite: ['albert@doe.com', 'robert@doe.com'],
+    })
+
+    expect(promise).rejects.toBeInstanceOf(InvalidDateError)
+  })
+
+  it('should not be able to create trip if start date is before today', async () => {
+    const { sut, usersRepository } = makeSut()
+
+    const user = await usersRepository.create({
+      email: 'john@doe.com',
+      first_name: 'John',
+      last_name: 'Doe',
+      password: 'password',
+    })
+
+    const promise = sut.execute({
+      destination: 'New York',
+      starts_at: new Date('2015-05-15T00:00:00.000Z'),
+      ends_at: new Date('2015-08-15T00:00:00.000Z'),
       owner_id: user.id,
       participants_to_invite: ['albert@doe.com', 'robert@doe.com'],
     })
