@@ -1,4 +1,4 @@
-import { InvalidCredentialsError } from '@/errors/users/invalid-credentials'
+import { InvalidCredentialsError } from '@/errors/invalid-credentials'
 import { ICrypto } from '@/helpers/crypto'
 import { UserRepository } from '@/repositories/interfaces/users-repository'
 import { User } from '@prisma/client'

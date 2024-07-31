@@ -1,4 +1,4 @@
-import { NotFoundError } from '@/errors/users/not-found'
+import { NotFoundError } from '@/errors/not-found'
 import { UserRepository } from '@/repositories/interfaces/users-repository'
 import { User } from '@prisma/client'
 

@@ -1,7 +1,7 @@
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { describe, expect, it } from 'vitest'
 import { GetProfileUseCase } from './get-profile'
-import { NotFoundError } from '@/errors/users/not-found'
+import { NotFoundError } from '@/errors/not-found'
 
 describe('GetProfileUseCase', () => {
   const makeSut = () => {

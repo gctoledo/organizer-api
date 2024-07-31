@@ -3,7 +3,7 @@ import { CreateTripUseCase } from './create-trip'
 import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trips-repository'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
-import { InvalidDateError } from '@/errors/trips/invalid-date'
+import { InvalidDateError } from '@/errors/invalid-date'
 
 describe('CreateTripUseCase', () => {
   const makeSut = () => {

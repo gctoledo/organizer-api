@@ -3,7 +3,7 @@ import { it, describe, expect } from 'vitest'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 
 import { AuthenticationUseCase } from './authentication'
-import { InvalidCredentialsError } from '@/errors/users/invalid-credentials'
+import { InvalidCredentialsError } from '@/errors/invalid-credentials'
 
 describe('AuthenticationUseCase', () => {
   const makeSut = () => {

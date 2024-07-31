@@ -1,6 +1,6 @@
 import dayjs from 'dayjs'
-import { InvalidDateError } from '@/errors/trips/invalid-date'
-import { NotFoundError } from '@/errors/users/not-found'
+import { InvalidDateError } from '@/errors/invalid-date'
+import { NotFoundError } from '@/errors/not-found'
 import { TripRepository } from '@/repositories/interfaces/trips-repository'
 import { UserRepository } from '@/repositories/interfaces/users-repository'
 

@@ -1,4 +1,4 @@
-import { EmailAlreadyExistsError } from '@/errors/users/email-already-exists'
+import { EmailAlreadyExistsError } from '@/errors/email-already-exists'
 import { ICrypto } from '@/helpers/crypto'
 import { UserRepository } from '@/repositories/interfaces/users-repository'
 import { User } from '@prisma/client'
