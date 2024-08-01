@@ -57,4 +57,10 @@ export class InMemoryTripsRepository implements TripRepository {
 
     this.trips = this.trips.filter((trip) => trip.id !== id)
   }
+
+  async confirm(id: string) {
+    const trip = this.trips.findIndex((trip) => trip.id === id)
+
+    this.trips[trip].is_confirmed = true
+  }
 }
