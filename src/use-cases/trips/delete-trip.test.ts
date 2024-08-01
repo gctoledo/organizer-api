@@ -3,6 +3,7 @@ import { DeleteTripUseCase } from './delete-trip'
 import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trips-repository'
 import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
+import { UnauthorizedError } from '@/errors/unauthorized'
 
 describe('DeleteTripUseCase', () => {
   const makeSut = () => {
@@ -48,5 +49,30 @@ describe('DeleteTripUseCase', () => {
 
     expect(deletedTrip).toBeNull()
     expect(deletedParticipants).toEqual([])
+  })
+
+  it('should not be able to delete a trip if user is not owner', async () => {
+    const { sut, tripsRepository, usersRepository } = makeSut()
+
+    const user = await usersRepository.create({
+      email: 'john@doe.com',
+      first_name: 'John',
+      last_name: 'Doe',
+      password: 'password',
+    })
+
+    const { trip } = await tripsRepository.create({
+      data: {
+        destination: 'New York',
+        starts_at: new Date('2030-05-15T00:00:00.000Z'),
+        ends_at: new Date('2030-06-15T00:00:00.000Z'),
+        userId: user.id,
+      },
+      participants: [{ email: 'albert@doe.com' }, { email: 'robert@doe.com' }],
+    })
+
+    const promise = sut.execute({ id: trip.id, ownerId: 'wrong_id' })
+
+    expect(promise).rejects.toBeInstanceOf(UnauthorizedError)
   })
 })
