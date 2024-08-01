@@ -4,6 +4,7 @@ import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trip
 import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { UnauthorizedError } from '@/errors/unauthorized'
+import { NotFoundError } from '@/errors/not-found'
 
 describe('DeleteTripUseCase', () => {
   const makeSut = () => {
@@ -74,5 +75,20 @@ describe('DeleteTripUseCase', () => {
     const promise = sut.execute({ id: trip.id, ownerId: 'wrong_id' })
 
     expect(promise).rejects.toBeInstanceOf(UnauthorizedError)
+  })
+
+  it('should not be able to delete a trip if trip does not exists', async () => {
+    const { sut, usersRepository } = makeSut()
+
+    const user = await usersRepository.create({
+      email: 'john@doe.com',
+      first_name: 'John',
+      last_name: 'Doe',
+      password: 'password',
+    })
+
+    const promise = sut.execute({ id: 'wrong_id', ownerId: user.id })
+
+    expect(promise).rejects.toBeInstanceOf(NotFoundError)
   })
 })
