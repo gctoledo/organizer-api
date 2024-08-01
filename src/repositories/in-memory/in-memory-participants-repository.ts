@@ -5,6 +5,14 @@ import { randomUUID } from 'crypto'
 export class InMemoryParticipantsRepository implements ParticipantsRepository {
   private participants: Participant[] = []
 
+  async findByTripId(tripId: string) {
+    const participants = this.participants.filter(
+      (participant) => participant.tripId === tripId,
+    )
+
+    return participants
+  }
+
   async create(data: Prisma.ParticipantUncheckedCreateInput) {
     const participant = {
       id: randomUUID().toString(),
@@ -33,5 +41,11 @@ export class InMemoryParticipantsRepository implements ParticipantsRepository {
     this.participants.push(...participants)
 
     return participants
+  }
+
+  async deleteMany(ids: string[]) {
+    this.participants = this.participants.filter(
+      (participant) => !ids.includes(participant.id),
+    )
   }
 }

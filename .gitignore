@@ -3,3 +3,6 @@ node_modules
 
 ## Environments Variables ##
 .env
+
+## VSCode settings ##
+.vscode

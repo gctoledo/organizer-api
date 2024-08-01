@@ -5,4 +5,6 @@ export interface ParticipantsRepository {
   createMany(
     data: Prisma.ParticipantUncheckedCreateInput[],
   ): Promise<Participant[]>
+  findByTripId(tripId: string): Promise<Participant[]>
+  deleteMany(ids: string[]): Promise<void>
 }
