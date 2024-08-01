@@ -24,7 +24,7 @@ export class InMemoryParticipantsRepository implements ParticipantsRepository {
       id: randomUUID().toString(),
       email: participant.email,
       first_name: participant.first_name || null,
-      is_confirmed: false,
+      is_confirmed: participant.is_confirmed || false,
       tripId: participant.tripId,
     }))
 

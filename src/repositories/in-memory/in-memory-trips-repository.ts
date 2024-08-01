@@ -24,10 +24,11 @@ export class InMemoryTripsRepository implements TripRepository {
 
     this.trips.push(trip)
 
-    const participantsToCreate = participants.map((participant) => ({
+    const participantsToCreate = participants.map((participant, i) => ({
       tripId: trip.id,
       email: participant.email,
       first_name: participant.first_name ?? null,
+      is_confirmed: i === 0,
     }))
 
     const _participants =
