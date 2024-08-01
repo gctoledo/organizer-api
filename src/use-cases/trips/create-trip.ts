@@ -40,9 +40,10 @@ export class CreateTripUseCase {
     }
 
     const participants = [
-      { email: owner.email, first_name: owner.first_name },
+      { email: owner.email, first_name: owner.first_name, owner: true },
       ...participants_to_invite.map((participantEmail) => ({
         email: participantEmail,
+        owner: false,
       })),
     ]
 
@@ -56,6 +57,10 @@ export class CreateTripUseCase {
         },
         participants,
       })
+
+    // TODO: Send email to owner to confirm trip
+
+    // TODO: Send email to participants to confirm trip
 
     return { trip, participants: _participants }
   }

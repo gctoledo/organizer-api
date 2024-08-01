@@ -3,6 +3,7 @@ import { Participant, Prisma, Trip } from '@prisma/client'
 export interface ParticipantParams {
   first_name?: string
   email: string
+  owner: boolean
 }
 
 export interface CreateTripParams {

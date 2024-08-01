@@ -37,7 +37,10 @@ describe('DeleteTripUseCase', () => {
         ends_at: new Date('2030-06-15T00:00:00.000Z'),
         userId: user.id,
       },
-      participants: [{ email: 'albert@doe.com' }, { email: 'robert@doe.com' }],
+      participants: [
+        { email: 'albert@doe.com', owner: false },
+        { email: 'robert@doe.com', owner: false },
+      ],
     })
 
     await sut.execute({ id: trip.id, ownerId: user.id })
@@ -69,7 +72,10 @@ describe('DeleteTripUseCase', () => {
         ends_at: new Date('2030-06-15T00:00:00.000Z'),
         userId: user.id,
       },
-      participants: [{ email: 'albert@doe.com' }, { email: 'robert@doe.com' }],
+      participants: [
+        { email: 'albert@doe.com', owner: false },
+        { email: 'robert@doe.com', owner: false },
+      ],
     })
 
     const promise = sut.execute({ id: trip.id, ownerId: 'wrong_id' })
