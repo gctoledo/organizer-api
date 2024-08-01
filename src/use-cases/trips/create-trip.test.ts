@@ -43,14 +43,17 @@ describe('CreateTripUseCase', () => {
         expect.objectContaining({
           email: user.email,
           is_confirmed: true,
+          owner: true,
         }),
         expect.objectContaining({
           email: 'albert@doe.com',
           is_confirmed: false,
+          owner: false,
         }),
         expect.objectContaining({
           email: 'robert@doe.com',
           is_confirmed: false,
+          owner: false,
         }),
       ]),
     )

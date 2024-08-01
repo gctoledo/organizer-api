@@ -67,9 +67,10 @@ model Activity {
 
 model Participant {
   id           String  @id @default(uuid())
-  email        String
+  email        String  @unique
   first_name   String?
   is_confirmed Boolean @default(false)
+  owner        Boolean @default(false)
 
   trip   Trip   @relation(fields: [tripId], references: [id])
   tripId String
