@@ -48,4 +48,12 @@ export class InMemoryParticipantsRepository implements ParticipantsRepository {
       (participant) => !ids.includes(participant.id),
     )
   }
+
+  async confirm(id: string) {
+    const participantIndex = this.participants.findIndex(
+      (participant) => participant.id === id,
+    )
+
+    this.participants[participantIndex].is_confirmed = true
+  }
 }

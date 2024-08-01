@@ -7,4 +7,5 @@ export interface ParticipantsRepository {
   ): Promise<Participant[]>
   findByTripId(tripId: string): Promise<Participant[]>
   deleteMany(ids: string[]): Promise<void>
+  confirm(id: string): Promise<void>
 }
