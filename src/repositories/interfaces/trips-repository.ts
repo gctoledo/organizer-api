@@ -16,5 +16,7 @@ export interface CreateTripResponse {
 }
 
 export interface TripRepository {
+  findById(id: string): Promise<Trip | null>
   create(data: CreateTripParams): Promise<CreateTripResponse>
+  delete(id: string): Promise<void>
 }

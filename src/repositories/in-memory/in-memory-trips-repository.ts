@@ -10,6 +10,15 @@ export class InMemoryTripsRepository implements TripRepository {
   private trips: Trip[] = []
 
   constructor(private participantsRepository: ParticipantsRepository) {}
+  async findById(id: string) {
+    const trip = this.trips.find((trip) => trip.id === id)
+
+    if (!trip) {
+      return null
+    }
+
+    return trip
+  }
 
   async create({ data, participants }: CreateTripParams) {
     const trip = {
@@ -36,5 +45,16 @@ export class InMemoryTripsRepository implements TripRepository {
       await this.participantsRepository.createMany(participantsToCreate)
 
     return { trip, participants: _participants }
+  }
+
+  async delete(id: string) {
+    const participantsToDelete =
+      await this.participantsRepository.findByTripId(id)
+
+    await this.participantsRepository.deleteMany(
+      participantsToDelete.map((participant) => participant.id),
+    )
+
+    this.trips = this.trips.filter((trip) => trip.id !== id)
   }
 }
