@@ -3,6 +3,7 @@ import { UpdateTripUseCase } from './update-trip'
 import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trips-repository'
 import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
+import { NotFoundError } from '@/errors/not-found'
 
 describe('UpdateTripUseCase', () => {
   let participantsRepository: InMemoryParticipantsRepository
@@ -53,5 +54,23 @@ describe('UpdateTripUseCase', () => {
       destination: 'Los Angeles',
       starts_at: new Date('2030-05-20T00:00:00.000Z'),
     })
+  })
+
+  it('should not be to update trip if trip was not found', async () => {
+    const user = await usersRepository.create({
+      email: 'john@doe.com',
+      first_name: 'John',
+      last_name: 'Doe',
+      password: 'password',
+    })
+
+    const promise = sut.execute({
+      ownerId: user.id,
+      tripId: 'invalid_id',
+      destination: 'Los Angeles',
+      starts_at: new Date('2030-05-20T00:00:00.000Z'),
+    })
+
+    expect(promise).rejects.toBeInstanceOf(NotFoundError)
   })
 })
