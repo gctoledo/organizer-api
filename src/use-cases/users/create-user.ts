@@ -1,5 +1,5 @@
 import { EmailAlreadyExistsError } from '@/errors/email-already-exists'
-import { ICrypto } from '@/helpers/crypto'
+import { Crypto } from '@/helpers/crypto'
 import { UserRepository } from '@/repositories/interfaces/users-repository'
 import { User } from '@prisma/client'
 
@@ -17,7 +17,7 @@ interface CreateUserUseCaseResponse {
 export class CreateUserUseCase {
   constructor(
     private userRepository: UserRepository,
-    private crypto: ICrypto,
+    private crypto: Crypto,
   ) {}
 
   async execute({
