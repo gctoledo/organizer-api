@@ -2,6 +2,7 @@ import { Trip } from '@prisma/client'
 import {
   CreateTripParams,
   TripRepository,
+  UpdateTripParams,
 } from '../interfaces/trips-repository'
 import { randomUUID } from 'crypto'
 import { ParticipantsRepository } from '../interfaces/participants-repository'
@@ -10,6 +11,7 @@ export class InMemoryTripsRepository implements TripRepository {
   private trips: Trip[] = []
 
   constructor(private participantsRepository: ParticipantsRepository) {}
+
   async findById(id: string) {
     const trip = this.trips.find((trip) => trip.id === id)
 
@@ -59,8 +61,28 @@ export class InMemoryTripsRepository implements TripRepository {
   }
 
   async confirm(id: string) {
-    const trip = this.trips.findIndex((trip) => trip.id === id)
+    const index = this.trips.findIndex((trip) => trip.id === id)
 
-    this.trips[trip].is_confirmed = true
+    if (index >= 0) {
+      this.trips[index].is_confirmed = true
+    }
+  }
+
+  async update({ id, params }: UpdateTripParams) {
+    const index = this.trips.findIndex((trip) => trip.id === id)
+
+    let trip = this.trips[index]
+
+    if (index >= 0) {
+      trip = {
+        ...trip,
+        starts_at: params.starts_at as Date,
+        ends_at: params.ends_at as Date,
+        destination:
+          (params.destination as string) ?? this.trips[index].destination,
+      }
+    }
+
+    return trip
   }
 }
