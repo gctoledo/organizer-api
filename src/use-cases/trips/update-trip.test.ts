@@ -4,6 +4,7 @@ import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trip
 import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { NotFoundError } from '@/errors/not-found'
+import { UnauthorizedError } from '@/errors/unauthorized'
 
 describe('UpdateTripUseCase', () => {
   let participantsRepository: InMemoryParticipantsRepository
@@ -72,5 +73,36 @@ describe('UpdateTripUseCase', () => {
     })
 
     expect(promise).rejects.toBeInstanceOf(NotFoundError)
+  })
+
+  it('should not be to update trip if owner was not found', async () => {
+    const user = await usersRepository.create({
+      email: 'john@doe.com',
+      first_name: 'John',
+      last_name: 'Doe',
+      password: 'password',
+    })
+
+    const { trip } = await tripsRepository.create({
+      data: {
+        destination: 'New York',
+        starts_at: new Date('2030-05-15T00:00:00.000Z'),
+        ends_at: new Date('2030-06-15T00:00:00.000Z'),
+        userId: user.id,
+      },
+      participants: [
+        { email: 'albert@doe.com', owner: false },
+        { email: 'robert@doe.com', owner: false },
+      ],
+    })
+
+    const promise = sut.execute({
+      ownerId: 'invalid_id',
+      tripId: trip.id,
+      destination: 'Los Angeles',
+      starts_at: new Date('2030-05-20T00:00:00.000Z'),
+    })
+
+    expect(promise).rejects.toBeInstanceOf(UnauthorizedError)
   })
 })
