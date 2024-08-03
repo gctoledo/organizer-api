@@ -1,35 +1,34 @@
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { DeleteTripUseCase } from './delete-trip'
 import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trips-repository'
 import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { UnauthorizedError } from '@/errors/unauthorized'
 import { NotFoundError } from '@/errors/not-found'
+import { User } from '@prisma/client'
 
 describe('DeleteTripUseCase', () => {
-  const makeSut = () => {
-    const usersRepository = new InMemoryUserRepository()
+  let usersRepository: InMemoryUserRepository
+  let participantsRepository: InMemoryParticipantsRepository
+  let tripsRepository: InMemoryTripsRepository
+  let sut: DeleteTripUseCase
+  let user: User
 
-    const participantsRepository = new InMemoryParticipantsRepository()
+  beforeEach(async () => {
+    participantsRepository = new InMemoryParticipantsRepository()
+    usersRepository = new InMemoryUserRepository()
+    tripsRepository = new InMemoryTripsRepository(participantsRepository)
+    sut = new DeleteTripUseCase(tripsRepository)
 
-    const tripsRepository = new InMemoryTripsRepository(participantsRepository)
-
-    const sut = new DeleteTripUseCase(tripsRepository)
-
-    return { tripsRepository, participantsRepository, usersRepository, sut }
-  }
-
-  it('should be able to delete a trip', async () => {
-    const { sut, tripsRepository, usersRepository, participantsRepository } =
-      makeSut()
-
-    const user = await usersRepository.create({
+    user = await usersRepository.create({
       email: 'john@doe.com',
       first_name: 'John',
       last_name: 'Doe',
       password: 'password',
     })
+  })
 
+  it('should be able to delete a trip', async () => {
     const { trip } = await tripsRepository.create({
       data: {
         destination: 'New York',
@@ -56,15 +55,6 @@ describe('DeleteTripUseCase', () => {
   })
 
   it('should not be able to delete a trip if user is not owner', async () => {
-    const { sut, tripsRepository, usersRepository } = makeSut()
-
-    const user = await usersRepository.create({
-      email: 'john@doe.com',
-      first_name: 'John',
-      last_name: 'Doe',
-      password: 'password',
-    })
-
     const { trip } = await tripsRepository.create({
       data: {
         destination: 'New York',
@@ -84,15 +74,6 @@ describe('DeleteTripUseCase', () => {
   })
 
   it('should not be able to delete a trip if trip does not exists', async () => {
-    const { sut, usersRepository } = makeSut()
-
-    const user = await usersRepository.create({
-      email: 'john@doe.com',
-      first_name: 'John',
-      last_name: 'Doe',
-      password: 'password',
-    })
-
     const promise = sut.execute({ id: 'wrong_id', ownerId: user.id })
 
     expect(promise).rejects.toBeInstanceOf(NotFoundError)

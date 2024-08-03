@@ -1,33 +1,32 @@
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { ConfirmTripUseCase } from './confirm-trip'
 import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trips-repository'
 import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
+import { Trip, User } from '@prisma/client'
 
 describe('ConfirmTripUseCase', () => {
-  const makeSut = () => {
-    const participantsRepositoru = new InMemoryParticipantsRepository()
+  let participantsRepository: InMemoryParticipantsRepository
+  let usersRepository: InMemoryUserRepository
+  let tripsRepository: InMemoryTripsRepository
+  let sut: ConfirmTripUseCase
+  let user: User
+  let trip: Trip
 
-    const usersRepository = new InMemoryUserRepository()
+  beforeEach(async () => {
+    participantsRepository = new InMemoryParticipantsRepository()
+    usersRepository = new InMemoryUserRepository()
+    tripsRepository = new InMemoryTripsRepository(participantsRepository)
+    sut = new ConfirmTripUseCase(tripsRepository)
 
-    const tripsRepository = new InMemoryTripsRepository(participantsRepositoru)
-
-    const sut = new ConfirmTripUseCase(tripsRepository)
-
-    return { sut, tripsRepository, usersRepository }
-  }
-
-  it('should be able to confirm trip', async () => {
-    const { sut, tripsRepository, usersRepository } = makeSut()
-
-    const user = await usersRepository.create({
+    user = await usersRepository.create({
       email: 'john@doe.com',
       first_name: 'John',
       last_name: 'Doe',
       password: 'password',
     })
 
-    const { trip } = await tripsRepository.create({
+    const createdTrip = await tripsRepository.create({
       data: {
         destination: 'New York',
         starts_at: new Date('2030-05-15T00:00:00.000Z'),
@@ -40,6 +39,10 @@ describe('ConfirmTripUseCase', () => {
       ],
     })
 
+    trip = createdTrip.trip
+  })
+
+  it('should be able to confirm trip', async () => {
     await sut.execute(trip.id)
 
     const confirmedTrip = await tripsRepository.findById(trip.id)

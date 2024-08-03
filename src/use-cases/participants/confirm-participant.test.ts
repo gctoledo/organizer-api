@@ -1,34 +1,33 @@
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { ConfirmParticipantUseCase } from './confirm-participant'
 import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trips-repository'
+import { Participant, Trip, User } from '@prisma/client'
 
 describe('ConfirmParticipantUseCase', () => {
-  const makeSut = () => {
-    const usersRepository = new InMemoryUserRepository()
+  let usersRepository: InMemoryUserRepository
+  let participantsRepository: InMemoryParticipantsRepository
+  let tripsRepository: InMemoryTripsRepository
+  let sut: ConfirmParticipantUseCase
+  let user: User
+  let trip: Trip
+  let participants: Participant[]
 
-    const participantsRepository = new InMemoryParticipantsRepository()
+  beforeEach(async () => {
+    usersRepository = new InMemoryUserRepository()
+    participantsRepository = new InMemoryParticipantsRepository()
+    tripsRepository = new InMemoryTripsRepository(participantsRepository)
+    sut = new ConfirmParticipantUseCase(participantsRepository)
 
-    const tripsRepository = new InMemoryTripsRepository(participantsRepository)
-
-    const sut = new ConfirmParticipantUseCase(participantsRepository)
-
-    return { participantsRepository, sut, usersRepository, tripsRepository }
-  }
-
-  it('should be able to confirm participant', async () => {
-    const { participantsRepository, sut, tripsRepository, usersRepository } =
-      makeSut()
-
-    const user = await usersRepository.create({
+    user = await usersRepository.create({
       email: 'john@doe.com',
       first_name: 'John',
       last_name: 'Doe',
       password: 'password',
     })
 
-    const { trip, participants } = await tripsRepository.create({
+    const createdTrip = await tripsRepository.create({
       data: {
         destination: 'New York',
         starts_at: new Date('2030-05-15T00:00:00.000Z'),
@@ -41,6 +40,11 @@ describe('ConfirmParticipantUseCase', () => {
       ],
     })
 
+    trip = createdTrip.trip
+    participants = createdTrip.participants
+  })
+
+  it('should be able to confirm participant', async () => {
     await sut.execute(participants[0].id)
 
     const tripParticipants = await participantsRepository.findByTripId(trip.id)

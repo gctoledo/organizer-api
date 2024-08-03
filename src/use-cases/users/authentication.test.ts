@@ -1,23 +1,19 @@
 import { Crypto } from '@/helpers/crypto'
-import { it, describe, expect } from 'vitest'
+import { it, describe, expect, beforeEach } from 'vitest'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 
 import { AuthenticationUseCase } from './authentication'
 import { InvalidCredentialsError } from '@/errors/invalid-credentials'
 
 describe('AuthenticationUseCase', () => {
-  const makeSut = () => {
-    const crypto = new Crypto()
+  let crypto: Crypto
+  let userRepository: InMemoryUserRepository
+  let sut: AuthenticationUseCase
 
-    const userRepository = new InMemoryUserRepository()
-
-    const sut = new AuthenticationUseCase(userRepository, crypto)
-
-    return { crypto, userRepository, sut }
-  }
-
-  it('should be able to authenticate', async () => {
-    const { sut, userRepository, crypto } = makeSut()
+  beforeEach(async () => {
+    crypto = new Crypto()
+    userRepository = new InMemoryUserRepository()
+    sut = new AuthenticationUseCase(userRepository, crypto)
 
     await userRepository.create({
       email: 'john@doe.com',
@@ -25,7 +21,9 @@ describe('AuthenticationUseCase', () => {
       last_name: 'Doe',
       password: await crypto.hash('password'),
     })
+  })
 
+  it('should be able to authenticate', async () => {
     const { user } = await sut.execute({
       email: 'john@doe.com',
       password: 'password',
@@ -39,15 +37,6 @@ describe('AuthenticationUseCase', () => {
   })
 
   it('should not be able to authenticate with wrong email', async () => {
-    const { sut, crypto, userRepository } = makeSut()
-
-    await userRepository.create({
-      email: 'john@doe.com',
-      first_name: 'John',
-      last_name: 'Doe',
-      password: await crypto.hash('password'),
-    })
-
     const promise = sut.execute({
       email: 'invalid_email',
       password: 'password',
@@ -57,15 +46,6 @@ describe('AuthenticationUseCase', () => {
   })
 
   it('should not be able to authenticate with wrong password', async () => {
-    const { sut, crypto, userRepository } = makeSut()
-
-    await userRepository.create({
-      email: 'john@doe.com',
-      first_name: 'John',
-      last_name: 'Doe',
-      password: await crypto.hash('password'),
-    })
-
     const promise = sut.execute({
       email: 'john@doe.com',
       password: 'invalid_password',

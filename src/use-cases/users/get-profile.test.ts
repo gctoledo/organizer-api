@@ -1,20 +1,18 @@
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
-import { describe, expect, it } from 'vitest'
+import { beforeEach, describe, expect, it } from 'vitest'
 import { GetProfileUseCase } from './get-profile'
 import { NotFoundError } from '@/errors/not-found'
 
 describe('GetProfileUseCase', () => {
-  const makeSut = () => {
-    const userRepository = new InMemoryUserRepository()
+  let userRepository: InMemoryUserRepository
+  let sut: GetProfileUseCase
 
-    const sut = new GetProfileUseCase(userRepository)
-
-    return { userRepository, sut }
-  }
+  beforeEach(() => {
+    userRepository = new InMemoryUserRepository()
+    sut = new GetProfileUseCase(userRepository)
+  })
 
   it('should be able to get profile', async () => {
-    const { sut, userRepository } = makeSut()
-
     const createdUser = await userRepository.create({
       email: 'john@doe.com',
       first_name: 'John',
@@ -28,8 +26,6 @@ describe('GetProfileUseCase', () => {
   })
 
   it('should not be able to get profile if user does not exists', async () => {
-    const { sut } = makeSut()
-
     const promise = sut.execute('random_id')
 
     expect(promise).rejects.toBeInstanceOf(NotFoundError)
