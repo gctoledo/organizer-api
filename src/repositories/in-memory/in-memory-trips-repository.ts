@@ -27,6 +27,25 @@ export class InMemoryTripsRepository implements TripRepository {
     }
   }
 
+  async findByUserId(userId: string) {
+    const trips = this.trips.filter((trip) => trip.userId === userId)
+
+    const tripsWParticipants = await Promise.all(
+      trips.map(async (trip) => {
+        const participants = await this.participantsRepository.findByTripId(
+          trip.id,
+        )
+
+        return {
+          ...trip,
+          participants,
+        }
+      }),
+    )
+
+    return tripsWParticipants
+  }
+
   async create({ data, participants }: CreateTripParams) {
     const trip = {
       id: randomUUID().toString(),

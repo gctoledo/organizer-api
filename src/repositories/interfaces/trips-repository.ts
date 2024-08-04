@@ -20,6 +20,7 @@ export interface UpdateTripParams {
 
 export interface TripRepository {
   findById(id: string): Promise<TripResponse | null>
+  findByUserId(userId: string): Promise<TripResponse[]>
   confirm(id: string): Promise<void>
   create(data: CreateTripParams): Promise<TripResponse>
   delete(id: string): Promise<void>
