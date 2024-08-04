@@ -39,7 +39,7 @@ describe('ConfirmTripUseCase', () => {
       ],
     })
 
-    trip = createdTrip.trip
+    trip = createdTrip
   })
 
   it('should be able to confirm trip', async () => {

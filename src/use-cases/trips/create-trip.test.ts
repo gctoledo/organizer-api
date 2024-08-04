@@ -29,7 +29,7 @@ describe('CreateTripUseCase', () => {
   })
 
   it('should be able to create trip', async () => {
-    const { participants, trip } = await sut.execute({
+    const { trip } = await sut.execute({
       destination: 'New York',
       starts_at: new Date('2030-05-15T00:00:00.000Z'),
       ends_at: new Date('2030-06-15T00:00:00.000Z'),
@@ -37,9 +37,9 @@ describe('CreateTripUseCase', () => {
       participants_to_invite: ['albert@doe.com', 'robert@doe.com'],
     })
 
-    expect(participants).toHaveLength(3)
+    expect(trip.participants).toHaveLength(3)
     expect(trip.destination).toEqual('New York')
-    expect(participants).toEqual(
+    expect(trip.participants).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           email: user.email,

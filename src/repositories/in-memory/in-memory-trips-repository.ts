@@ -19,7 +19,12 @@ export class InMemoryTripsRepository implements TripRepository {
       return null
     }
 
-    return trip
+    const participants = await this.participantsRepository.findByTripId(trip.id)
+
+    return {
+      ...trip,
+      participants,
+    }
   }
 
   async create({ data, participants }: CreateTripParams) {
@@ -46,7 +51,10 @@ export class InMemoryTripsRepository implements TripRepository {
     const _participants =
       await this.participantsRepository.createMany(participantsToCreate)
 
-    return { trip, participants: _participants }
+    return {
+      ...trip,
+      participants: _participants,
+    }
   }
 
   async delete(id: string) {

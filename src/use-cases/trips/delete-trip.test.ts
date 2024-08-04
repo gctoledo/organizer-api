@@ -29,7 +29,7 @@ describe('DeleteTripUseCase', () => {
   })
 
   it('should be able to delete a trip', async () => {
-    const { trip } = await tripsRepository.create({
+    const trip = await tripsRepository.create({
       data: {
         destination: 'New York',
         starts_at: new Date('2030-05-15T00:00:00.000Z'),
@@ -55,7 +55,7 @@ describe('DeleteTripUseCase', () => {
   })
 
   it('should not be able to delete a trip if user is not owner', async () => {
-    const { trip } = await tripsRepository.create({
+    const trip = await tripsRepository.create({
       data: {
         destination: 'New York',
         starts_at: new Date('2030-05-15T00:00:00.000Z'),

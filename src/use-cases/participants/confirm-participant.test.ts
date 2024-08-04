@@ -40,7 +40,7 @@ describe('ConfirmParticipantUseCase', () => {
       ],
     })
 
-    trip = createdTrip.trip
+    trip = createdTrip
     participants = createdTrip.participants
   })
 

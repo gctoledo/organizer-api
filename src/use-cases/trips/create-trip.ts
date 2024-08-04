@@ -47,21 +47,16 @@ export class CreateTripUseCase {
       })),
     ]
 
-    const { trip, participants: _participants } =
-      await this.tripRepository.create({
-        data: {
-          destination,
-          ends_at,
-          starts_at,
-          userId: owner_id,
-        },
-        participants,
-      })
+    const trip = await this.tripRepository.create({
+      data: {
+        destination,
+        ends_at,
+        starts_at,
+        userId: owner_id,
+      },
+      participants,
+    })
 
-    // TODO: Send email to owner to confirm trip
-
-    // TODO: Send email to participants to confirm trip
-
-    return { trip, participants: _participants }
+    return { trip }
   }
 }

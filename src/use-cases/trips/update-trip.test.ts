@@ -6,7 +6,8 @@ import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users
 import { InvalidDateError } from '@/errors/invalid-date'
 import { NotFoundError } from '@/errors/not-found'
 import { UnauthorizedError } from '@/errors/unauthorized'
-import { Trip, User } from '@prisma/client'
+import { User } from '@prisma/client'
+import { TripResponse } from '@/repositories/interfaces/trips-repository'
 
 describe('UpdateTripUseCase', () => {
   let participantsRepository: InMemoryParticipantsRepository
@@ -14,7 +15,7 @@ describe('UpdateTripUseCase', () => {
   let tripsRepository: InMemoryTripsRepository
   let sut: UpdateTripUseCase
   let user: User
-  let trip: Trip
+  let trip: TripResponse
 
   beforeEach(async () => {
     participantsRepository = new InMemoryParticipantsRepository()
@@ -42,7 +43,7 @@ describe('UpdateTripUseCase', () => {
       ],
     })
 
-    trip = createdTrip.trip
+    trip = createdTrip
   })
 
   it('should be able to update a trip', async () => {
@@ -57,6 +58,7 @@ describe('UpdateTripUseCase', () => {
       ...trip,
       destination: 'Los Angeles',
       starts_at: new Date('2030-05-20T00:00:00.000Z'),
+      participants: undefined,
     })
   })
 
