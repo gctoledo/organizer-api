@@ -5,6 +5,7 @@ import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trip
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { User } from '@prisma/client'
 import { TripResponse } from '@/repositories/interfaces/trips-repository'
+import { UnauthorizedError } from '@/errors/unauthorized'
 
 describe('GetTripUseCase', () => {
   let participantsRepository: InMemoryParticipantsRepository
@@ -60,7 +61,7 @@ describe('GetTripUseCase', () => {
     )
   })
 
-  it('should be able to get a trip with email', async () => {
+  it('should be able to get a trip with participant email', async () => {
     const result = await sut.execute({
       tripId: trip.id,
       credential: 'albert@doe.com',
@@ -78,5 +79,14 @@ describe('GetTripUseCase', () => {
         ]),
       }),
     )
+  })
+
+  it('should be able to get a trip with invalid credential', async () => {
+    const promise = sut.execute({
+      tripId: trip.id,
+      credential: 'invalid_credential',
+    })
+
+    expect(promise).rejects.toBeInstanceOf(UnauthorizedError)
   })
 })
