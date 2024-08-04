@@ -59,4 +59,24 @@ describe('GetTripUseCase', () => {
       }),
     )
   })
+
+  it('should be able to get a trip with email', async () => {
+    const result = await sut.execute({
+      tripId: trip.id,
+      credential: 'albert@doe.com',
+    })
+
+    expect(result.trip).toEqual(
+      expect.objectContaining({
+        destination: 'New York',
+        userId: user.id,
+        participants: expect.arrayContaining([
+          expect.objectContaining({
+            email: 'albert@doe.com',
+            owner: false,
+          }),
+        ]),
+      }),
+    )
+  })
 })
