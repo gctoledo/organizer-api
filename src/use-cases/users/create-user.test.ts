@@ -4,16 +4,18 @@ import { CreateUserUseCase } from './create-user'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { compare } from 'bcryptjs'
 import { EmailAlreadyExistsError } from '@/errors/email-already-exists'
+import { GenerateData } from '@/tests/generate-data'
 
 describe('CreateUserUseCase', () => {
+  let usersRepository: InMemoryUserRepository
   let crypto: Crypto
-  let userRepository: InMemoryUserRepository
   let sut: CreateUserUseCase
 
   beforeEach(() => {
+    const data = new GenerateData()
     crypto = new Crypto()
-    userRepository = new InMemoryUserRepository()
-    sut = new CreateUserUseCase(userRepository, crypto)
+    sut = new CreateUserUseCase(data.usersRepository, crypto)
+    usersRepository = data.usersRepository
   })
 
   it('should be able to hash passoword', async () => {
@@ -33,7 +35,7 @@ describe('CreateUserUseCase', () => {
   })
 
   it('should not be able to create user if email already exists', async () => {
-    await userRepository.create({
+    await usersRepository.create({
       email: 'john@doe.com',
       first_name: 'John',
       last_name: 'Doe',

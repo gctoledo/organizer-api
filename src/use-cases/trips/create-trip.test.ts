@@ -1,31 +1,19 @@
+import { User } from '@prisma/client'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { CreateTripUseCase } from './create-trip'
-import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trips-repository'
-import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
-import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
 import { InvalidDateError } from '@/errors/invalid-date'
 import { NotFoundError } from '@/errors/not-found'
-import { User } from '@prisma/client'
+import { GenerateData } from '@/tests/generate-data'
 
 describe('CreateTripUseCase', () => {
-  let participantsRepository: InMemoryParticipantsRepository
-  let tripsRepository: InMemoryTripsRepository
-  let usersRepository: InMemoryUserRepository
   let sut: CreateTripUseCase
   let user: User
 
   beforeEach(async () => {
-    participantsRepository = new InMemoryParticipantsRepository()
-    usersRepository = new InMemoryUserRepository()
-    tripsRepository = new InMemoryTripsRepository(participantsRepository)
-    sut = new CreateTripUseCase(tripsRepository, usersRepository)
+    const data = new GenerateData()
+    sut = new CreateTripUseCase(data.tripsRepository, data.usersRepository)
 
-    user = await usersRepository.create({
-      email: 'john@doe.com',
-      first_name: 'John',
-      last_name: 'Doe',
-      password: 'password',
-    })
+    user = await data.createUser()
   })
 
   it('should be able to create trip', async () => {

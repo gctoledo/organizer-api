@@ -2,18 +2,20 @@ import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users
 import { beforeEach, describe, expect, it } from 'vitest'
 import { GetProfileUseCase } from './get-profile'
 import { NotFoundError } from '@/errors/not-found'
+import { GenerateData } from '@/tests/generate-data'
 
 describe('GetProfileUseCase', () => {
-  let userRepository: InMemoryUserRepository
+  let usersRepository: InMemoryUserRepository
   let sut: GetProfileUseCase
 
   beforeEach(() => {
-    userRepository = new InMemoryUserRepository()
-    sut = new GetProfileUseCase(userRepository)
+    const data = new GenerateData()
+    usersRepository = data.usersRepository
+    sut = new GetProfileUseCase(data.usersRepository)
   })
 
   it('should be able to get profile', async () => {
-    const createdUser = await userRepository.create({
+    const createdUser = await usersRepository.create({
       email: 'john@doe.com',
       first_name: 'John',
       last_name: 'Doe',

@@ -1,26 +1,19 @@
 import { Crypto } from '@/helpers/crypto'
 import { it, describe, expect, beforeEach } from 'vitest'
-import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
-
 import { AuthenticationUseCase } from './authentication'
 import { InvalidCredentialsError } from '@/errors/invalid-credentials'
+import { GenerateData } from '@/tests/generate-data'
 
 describe('AuthenticationUseCase', () => {
   let crypto: Crypto
-  let userRepository: InMemoryUserRepository
   let sut: AuthenticationUseCase
 
   beforeEach(async () => {
+    const data = new GenerateData()
     crypto = new Crypto()
-    userRepository = new InMemoryUserRepository()
-    sut = new AuthenticationUseCase(userRepository, crypto)
+    sut = new AuthenticationUseCase(data.usersRepository, crypto)
 
-    await userRepository.create({
-      email: 'john@doe.com',
-      first_name: 'John',
-      last_name: 'Doe',
-      password: await crypto.hash('password'),
-    })
+    await data.createUser()
   })
 
   it('should be able to authenticate', async () => {

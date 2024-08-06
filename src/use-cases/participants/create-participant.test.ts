@@ -1,49 +1,29 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { CreateParticipantUseCase } from './create-participant'
 import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
-import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trips-repository'
-import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
+
 import { TripResponse } from '@/repositories/interfaces/trips-repository'
 import { User } from '@prisma/client'
 import { NotFoundError } from '@/errors/not-found'
 import { UnauthorizedError } from '@/errors/unauthorized'
+import { GenerateData } from '@/tests/generate-data'
 
 describe('CreateParticipantsUseCase', () => {
-  let usersRepository: InMemoryUserRepository
-  let tripsRepository: InMemoryTripsRepository
   let participantsRepository: InMemoryParticipantsRepository
   let sut: CreateParticipantUseCase
   let user: User
   let trip: TripResponse
 
   beforeEach(async () => {
-    usersRepository = new InMemoryUserRepository()
-    participantsRepository = new InMemoryParticipantsRepository()
-    tripsRepository = new InMemoryTripsRepository(participantsRepository)
-    sut = new CreateParticipantUseCase(participantsRepository, tripsRepository)
+    const data = new GenerateData()
+    sut = new CreateParticipantUseCase(
+      data.participantsRepository,
+      data.tripsRepository,
+    )
+    participantsRepository = data.participantsRepository
 
-    user = await usersRepository.create({
-      email: 'john@doe.com',
-      first_name: 'John',
-      last_name: 'Doe',
-      password: 'password',
-    })
-
-    const createdTrip = await tripsRepository.create({
-      data: {
-        destination: 'New York',
-        starts_at: new Date('2030-05-15T00:00:00.000Z'),
-        ends_at: new Date('2030-06-15T00:00:00.000Z'),
-        userId: user.id,
-      },
-      participants: [
-        { email: 'john@doe.com', owner: true },
-        { email: 'albert@doe.com', owner: false },
-        { email: 'robert@doe.com', owner: false },
-      ],
-    })
-
-    trip = createdTrip
+    user = await data.createUser()
+    trip = await data.createTrip()
   })
 
   it('should be able to create participant', async () => {
