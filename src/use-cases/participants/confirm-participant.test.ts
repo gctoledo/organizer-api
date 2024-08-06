@@ -35,6 +35,7 @@ describe('ConfirmParticipantUseCase', () => {
         userId: user.id,
       },
       participants: [
+        { email: 'john@doe.com', owner: true },
         { email: 'albert@doe.com', owner: false },
         { email: 'robert@doe.com', owner: false },
       ],
@@ -45,12 +46,17 @@ describe('ConfirmParticipantUseCase', () => {
   })
 
   it('should be able to confirm participant', async () => {
-    await sut.execute(participants[0].id)
+    await sut.execute(participants[1].id)
 
     const tripParticipants = await participantsRepository.findByTripId(trip.id)
 
     expect(tripParticipants).toEqual(
       expect.arrayContaining([
+        expect.objectContaining({
+          email: 'john@doe.com',
+          is_confirmed: true,
+          owner: true,
+        }),
         expect.objectContaining({
           email: 'albert@doe.com',
           is_confirmed: true,

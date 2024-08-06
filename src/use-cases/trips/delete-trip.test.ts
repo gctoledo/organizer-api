@@ -37,6 +37,7 @@ describe('DeleteTripUseCase', () => {
         userId: user.id,
       },
       participants: [
+        { email: 'john@doe.com', owner: true },
         { email: 'albert@doe.com', owner: false },
         { email: 'robert@doe.com', owner: false },
       ],

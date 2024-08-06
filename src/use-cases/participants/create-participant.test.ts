@@ -37,6 +37,7 @@ describe('CreateParticipantsUseCase', () => {
         userId: user.id,
       },
       participants: [
+        { email: 'john@doe.com', owner: true },
         { email: 'albert@doe.com', owner: false },
         { email: 'robert@doe.com', owner: false },
       ],
@@ -57,7 +58,7 @@ describe('CreateParticipantsUseCase', () => {
       trip.id,
     )
 
-    expect(updatedParticipants).toHaveLength(3)
+    expect(updatedParticipants).toHaveLength(4)
     expect(participant).toEqual(
       expect.objectContaining({
         email: 'roger@doe.com',
