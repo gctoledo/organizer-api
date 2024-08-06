@@ -5,6 +5,20 @@ import { randomUUID } from 'node:crypto'
 export class InMemoryLinksRepository implements LinksRepository {
   private links: Link[] = []
 
+  async findById(id: string) {
+    const link = this.links.find((link) => link.id === id)
+
+    if (!link) return null
+
+    return link
+  }
+
+  async findByTripId(tripId: string) {
+    const links = this.links.filter((link) => link.tripId === tripId)
+
+    return links
+  }
+
   async create(data: Prisma.LinkUncheckedCreateInput) {
     const link = {
       ...data,
