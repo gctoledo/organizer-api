@@ -6,11 +6,15 @@ import {
 } from '../interfaces/trips-repository'
 import { randomUUID } from 'crypto'
 import { ParticipantsRepository } from '../interfaces/participants-repository'
+import { LinksRepository } from '../interfaces/links-repository'
 
 export class InMemoryTripsRepository implements TripRepository {
   private trips: Trip[] = []
 
-  constructor(private participantsRepository: ParticipantsRepository) {}
+  constructor(
+    private participantsRepository: ParticipantsRepository,
+    private linksRepository: LinksRepository,
+  ) {}
 
   async findById(id: string) {
     const trip = this.trips.find((trip) => trip.id === id)
@@ -21,9 +25,12 @@ export class InMemoryTripsRepository implements TripRepository {
 
     const participants = await this.participantsRepository.findByTripId(trip.id)
 
+    const links = await this.linksRepository.findByTripId(trip.id)
+
     return {
       ...trip,
       participants,
+      links,
     }
   }
 
