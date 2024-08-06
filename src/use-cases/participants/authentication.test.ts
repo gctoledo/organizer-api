@@ -5,6 +5,7 @@ import { Trip, User } from '@prisma/client'
 import { InMemoryUserRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trips-repository'
 import { InvalidCredentialsError } from '@/errors/invalid-credentials'
+import { InvalidParticipantError } from '@/errors/invalid-participant-error'
 
 describe('AuthenticationParticipantsUseCase', () => {
   let usersRepository: InMemoryUserRepository
@@ -66,5 +67,14 @@ describe('AuthenticationParticipantsUseCase', () => {
     })
 
     expect(promise).rejects.toBeInstanceOf(InvalidCredentialsError)
+  })
+
+  it('should not be able to authentication participant if email belongs trip owner', async () => {
+    const promise = sut.execute({
+      email: 'john@doe.com',
+      tridId: trip.id,
+    })
+
+    expect(promise).rejects.toBeInstanceOf(InvalidParticipantError)
   })
 })
