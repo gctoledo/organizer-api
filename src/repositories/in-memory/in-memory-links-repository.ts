@@ -29,4 +29,8 @@ export class InMemoryLinksRepository implements LinksRepository {
 
     return link
   }
+
+  async delete(id: string) {
+    this.links = this.links.filter((link) => link.id !== id)
+  }
 }
