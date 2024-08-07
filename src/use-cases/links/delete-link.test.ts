@@ -6,6 +6,7 @@ import { TripResponse } from '@/repositories/interfaces/trips-repository'
 import { InMemoryLinksRepository } from '@/repositories/in-memory/in-memory-links-repository'
 import { NotFoundError } from '@/errors/not-found'
 import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trips-repository'
+import { UnauthorizedError } from '@/errors/unauthorized'
 
 describe('DeleteLinkUseCase', () => {
   let linkRepository: InMemoryLinksRepository
@@ -38,6 +39,14 @@ describe('DeleteLinkUseCase', () => {
 
   it('should not be able to delete link if not exists', async () => {
     const promise = sut.execute({ linkId: 'wrong_id', userId: user.id })
+
+    expect(promise).rejects.toBeInstanceOf(NotFoundError)
+  })
+
+  it('should not be able to delete link if trip not exists', async () => {
+    await tripsRepository.delete(trip.id)
+
+    const promise = sut.execute({ linkId: link.id, userId: user.id })
 
     expect(promise).rejects.toBeInstanceOf(NotFoundError)
   })
