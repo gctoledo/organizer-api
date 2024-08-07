@@ -50,4 +50,10 @@ describe('DeleteLinkUseCase', () => {
 
     expect(promise).rejects.toBeInstanceOf(NotFoundError)
   })
+
+  it('should not be able to delete link if userId is invalid', async () => {
+    const promise = sut.execute({ linkId: link.id, userId: 'wrong_id' })
+
+    expect(promise).rejects.toBeInstanceOf(UnauthorizedError)
+  })
 })
