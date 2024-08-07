@@ -4,6 +4,7 @@ import { DeleteLinkUseCase } from './delete-link'
 import { GenerateData } from '@/tests/generate-data'
 import { TripResponse } from '@/repositories/interfaces/trips-repository'
 import { InMemoryLinksRepository } from '@/repositories/in-memory/in-memory-links-repository'
+import { NotFoundError } from '@/errors/not-found'
 import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trips-repository'
 
 describe('DeleteLinkUseCase', () => {
@@ -33,5 +34,11 @@ describe('DeleteLinkUseCase', () => {
     const deletedLink = await linkRepository.findById(link.id)
 
     expect(deletedLink).toBeNull()
+  })
+
+  it('should not be able to delete link if not exists', async () => {
+    const promise = sut.execute({ linkId: 'wrong_id', userId: user.id })
+
+    expect(promise).rejects.toBeInstanceOf(NotFoundError)
   })
 })
