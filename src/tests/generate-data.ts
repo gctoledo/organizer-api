@@ -1,4 +1,5 @@
 import { Crypto } from '@/helpers/crypto'
+import { InMemoryActivitiesRepository } from '@/repositories/in-memory/in-memory-activities-repository'
 import { InMemoryLinksRepository } from '@/repositories/in-memory/in-memory-links-repository'
 import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
 import { InMemoryTripsRepository } from '@/repositories/in-memory/in-memory-trips-repository'
@@ -13,6 +14,7 @@ export class GenerateData {
   public tripsRepository: InMemoryTripsRepository
   public participantsRepository: InMemoryParticipantsRepository
   public linksRepository: InMemoryLinksRepository
+  public activitiesRepository: InMemoryActivitiesRepository
 
   constructor() {
     this.usersRepository = new InMemoryUserRepository()
@@ -22,6 +24,7 @@ export class GenerateData {
       this.participantsRepository,
       this.linksRepository,
     )
+    this.activitiesRepository = new InMemoryActivitiesRepository()
     this.crypto = new Crypto()
   }
 
