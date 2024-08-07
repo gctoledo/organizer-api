@@ -21,6 +21,7 @@ export class InMemoryParticipantsRepository implements ParticipantsRepository {
       is_confirmed: false,
       tripId: data.tripId,
       owner: false,
+      created_at: new Date(),
     }
 
     this.participants.push(participant)
@@ -36,6 +37,7 @@ export class InMemoryParticipantsRepository implements ParticipantsRepository {
       is_confirmed: participant.is_confirmed || false,
       tripId: participant.tripId,
       owner: participant.owner || false,
+      created_at: new Date(),
     }))
 
     this.participants.push(...participants)

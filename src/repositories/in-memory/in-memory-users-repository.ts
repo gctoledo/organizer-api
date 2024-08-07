@@ -29,6 +29,7 @@ export class InMemoryUserRepository implements UserRepository {
     const user = {
       id: randomUUID().toString(),
       ...data,
+      created_at: new Date(),
     }
 
     this.users.push(user)

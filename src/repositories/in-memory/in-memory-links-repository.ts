@@ -23,6 +23,7 @@ export class InMemoryLinksRepository implements LinksRepository {
     const link = {
       ...data,
       id: randomUUID().toString(),
+      created_at: new Date(),
     }
 
     this.links.push(link)

@@ -14,11 +14,12 @@ datasource db {
 }
 
 model User {
-  id         String @id @default(uuid())
-  email      String @unique
+  id         String   @id @default(uuid())
+  email      String   @unique
   first_name String
   last_name  String
   password   String
+  created_at DateTime @default(now())
 
   Trip Trip[]
 
@@ -44,9 +45,10 @@ model Trip {
 }
 
 model Link {
-  id    String @id @default(uuid())
-  title String
-  url   String
+  id         String   @id @default(uuid())
+  title      String
+  url        String
+  created_at DateTime @default(now())
 
   trip   Trip   @relation(fields: [tripId], references: [id])
   tripId String
@@ -66,11 +68,12 @@ model Activity {
 }
 
 model Participant {
-  id           String  @id @default(uuid())
-  email        String  @unique
+  id           String   @id @default(uuid())
+  email        String   @unique
   first_name   String?
-  is_confirmed Boolean @default(false)
-  owner        Boolean @default(false)
+  is_confirmed Boolean  @default(false)
+  owner        Boolean  @default(false)
+  created_at   DateTime @default(now())
 
   trip   Trip   @relation(fields: [tripId], references: [id])
   tripId String
