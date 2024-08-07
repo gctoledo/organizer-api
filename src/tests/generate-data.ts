@@ -100,4 +100,14 @@ export class GenerateData {
 
     return trips
   }
+
+  async createLink() {
+    const link = await this.linksRepository.create({
+      title: 'Airbnb',
+      tripId: this.trips[0].id,
+      url: 'https://www.airbnb.com.br',
+    })
+
+    return link
+  }
 }
