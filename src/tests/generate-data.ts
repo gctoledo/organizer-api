@@ -20,11 +20,12 @@ export class GenerateData {
     this.usersRepository = new InMemoryUserRepository()
     this.participantsRepository = new InMemoryParticipantsRepository()
     this.linksRepository = new InMemoryLinksRepository()
+    this.activitiesRepository = new InMemoryActivitiesRepository()
     this.tripsRepository = new InMemoryTripsRepository(
       this.participantsRepository,
       this.linksRepository,
+      this.activitiesRepository,
     )
-    this.activitiesRepository = new InMemoryActivitiesRepository()
     this.crypto = new Crypto()
   }
 
@@ -112,5 +113,15 @@ export class GenerateData {
     })
 
     return link
+  }
+
+  async createActivity() {
+    const activity = await this.activitiesRepository.create({
+      title: 'Shopping',
+      occurs_at: new Date('2030-05-16T00:00:00.000Z'),
+      tripId: this.trips[0].id,
+    })
+
+    return activity
   }
 }

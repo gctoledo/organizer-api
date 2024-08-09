@@ -1,7 +1,10 @@
-import { Link, Participant, Prisma, Trip } from '@prisma/client'
+import { Activity, Link, Participant, Prisma, Trip } from '@prisma/client'
 
 export type TripResponse = Trip & { participants: Participant[] }
-export type TripDetailsResponse = TripResponse & { links: Link[] }
+export type TripDetailsResponse = TripResponse & {
+  links: Link[]
+  activities: Activity[]
+}
 
 export interface ParticipantParams {
   first_name?: string
