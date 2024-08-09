@@ -47,4 +47,15 @@ describe('UpdateActivityUseCase', () => {
       }),
     )
   })
+
+  it('should not be able to update a activity if activity is not found', async () => {
+    const promise = sut.execute({
+      activityId: 'wrong_id',
+      userId: user.id,
+      title: 'Praia',
+      occurs_at: new Date('2030-05-17T00:00:00.000Z'),
+    })
+
+    expect(promise).rejects.toBeInstanceOf(NotFoundError)
+  })
 })
