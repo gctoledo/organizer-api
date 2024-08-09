@@ -71,4 +71,15 @@ describe('UpdateActivityUseCase', () => {
 
     expect(promise).rejects.toBeInstanceOf(NotFoundError)
   })
+
+  it('should not be able to update a activity if user id is invalid', async () => {
+    const promise = sut.execute({
+      activityId: activity.id,
+      userId: 'wrong_id',
+      title: 'Praia',
+      occurs_at: new Date('2030-05-17T00:00:00.000Z'),
+    })
+
+    expect(promise).rejects.toBeInstanceOf(UnauthorizedError)
+  })
 })
