@@ -54,4 +54,13 @@ describe('DeleteParticipantUseCase', () => {
 
     expect(promise).rejects.toBeInstanceOf(UnauthorizedError)
   })
+
+  it('should not be able to delete a participant if user id is not valid', async () => {
+    const promise = sut.execute({
+      participantId: participant.id,
+      userId: 'wrong_id',
+    })
+
+    expect(promise).rejects.toBeInstanceOf(UnauthorizedError)
+  })
 })
