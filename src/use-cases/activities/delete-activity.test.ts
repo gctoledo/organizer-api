@@ -4,6 +4,7 @@ import { DeleteActivityUseCase } from './delete-activity'
 import { GenerateData } from '@/tests/generate-data'
 import { InMemoryActivitiesRepository } from '@/repositories/in-memory/in-memory-activities-repository'
 import { NotFoundError } from '@/errors/not-found'
+import { UnauthorizedError } from '@/errors/unauthorized'
 
 describe('DeleteActivityUseCase', () => {
   let sut: DeleteActivityUseCase
@@ -36,5 +37,11 @@ describe('DeleteActivityUseCase', () => {
     const promise = sut.execute({ activityId: 'wrong_id', userId: user.id })
 
     expect(promise).rejects.toBeInstanceOf(NotFoundError)
+  })
+
+  it('should not be able to delete a activity if user id is invalid', async () => {
+    const promise = sut.execute({ activityId: activity.id, userId: 'wrong_id' })
+
+    expect(promise).rejects.toBeInstanceOf(UnauthorizedError)
   })
 })
