@@ -5,6 +5,18 @@ import { randomUUID } from 'crypto'
 export class InMemoryParticipantsRepository implements ParticipantsRepository {
   private participants: Participant[] = []
 
+  async findById(id: string) {
+    const participant = this.participants.find(
+      (participant) => participant.id === id,
+    )
+
+    if (!participant) {
+      return null
+    }
+
+    return participant
+  }
+
   async findByTripId(tripId: string) {
     const participants = this.participants.filter(
       (participant) => participant.tripId === tripId,
@@ -43,6 +55,12 @@ export class InMemoryParticipantsRepository implements ParticipantsRepository {
     this.participants.push(...participants)
 
     return participants
+  }
+
+  async delete(id: string) {
+    this.participants = this.participants.filter(
+      (participant) => participant.id !== id,
+    )
   }
 
   async deleteMany(ids: string[]) {
