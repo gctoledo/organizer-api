@@ -3,6 +3,7 @@ import { Activity, User } from '@prisma/client'
 import { DeleteActivityUseCase } from './delete-activity'
 import { GenerateData } from '@/tests/generate-data'
 import { InMemoryActivitiesRepository } from '@/repositories/in-memory/in-memory-activities-repository'
+import { NotFoundError } from '@/errors/not-found'
 
 describe('DeleteActivityUseCase', () => {
   let sut: DeleteActivityUseCase
@@ -29,5 +30,11 @@ describe('DeleteActivityUseCase', () => {
     const activities = await activitiesRepository.findById(activity.id)
 
     expect(activities).toBeNull()
+  })
+
+  it('should not be able to delete a activity if activity is not found', async () => {
+    const promise = sut.execute({ activityId: 'wrong_id', userId: user.id })
+
+    expect(promise).rejects.toBeInstanceOf(NotFoundError)
   })
 })
