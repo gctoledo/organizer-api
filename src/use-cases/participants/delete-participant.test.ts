@@ -3,6 +3,7 @@ import { Participant, User } from '@prisma/client'
 import { GenerateData } from '@/tests/generate-data'
 import { DeleteParticipantUseCase } from './delete-participant'
 import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
+import { NotFoundError } from '@/errors/not-found'
 
 describe('DeleteParticipantUseCase', () => {
   let sut: DeleteParticipantUseCase
@@ -36,5 +37,11 @@ describe('DeleteParticipantUseCase', () => {
     )
 
     expect(deletedParticipant).toBeNull()
+  })
+
+  it('should not be able to delete a participant if participant does not exist', async () => {
+    const promise = sut.execute({ participantId: 'wrong_id', userId: user.id })
+
+    expect(promise).rejects.toBeInstanceOf(NotFoundError)
   })
 })
