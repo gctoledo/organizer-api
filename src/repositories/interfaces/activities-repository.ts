@@ -13,4 +13,5 @@ export interface ActivitiesRepository {
   findByTripId(tripId: string): Promise<Activity[]>
   create(data: Prisma.ActivityUncheckedCreateInput): Promise<Activity>
   update(data: UpdateActivityParams): Promise<Activity>
+  delete(id: string): Promise<void>
 }

@@ -54,4 +54,8 @@ export class InMemoryActivitiesRepository implements ActivitiesRepository {
 
     return activity
   }
+
+  async delete(id: string) {
+    this.activities = this.activities.filter((activity) => activity.id !== id)
+  }
 }
