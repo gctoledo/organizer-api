@@ -63,4 +63,13 @@ describe('DeleteParticipantUseCase', () => {
 
     expect(promise).rejects.toBeInstanceOf(UnauthorizedError)
   })
+
+  it('should not be able to delete a participant if participant is trip owner', async () => {
+    const promise = sut.execute({
+      participantId: owner.id,
+      userId: user.id,
+    })
+
+    expect(promise).rejects.toBeInstanceOf(UnauthorizedError)
+  })
 })
