@@ -23,11 +23,7 @@ export class DeleteLinkUseCase {
 
     const trip = await this.tripsRepository.findById(link.tripId)
 
-    if (!trip) {
-      throw new NotFoundError('Trip')
-    }
-
-    if (trip.userId !== userId) {
+    if (trip?.userId !== userId) {
       throw new UnauthorizedError()
     }
 

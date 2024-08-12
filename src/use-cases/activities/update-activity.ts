@@ -30,11 +30,7 @@ export class UpdateActivityUseCase {
 
     const trip = await this.tripsRepository.findById(activity.tripId)
 
-    if (!trip) {
-      throw new NotFoundError('Trip')
-    }
-
-    if (trip.userId !== userId) {
+    if (trip?.userId !== userId) {
       throw new UnauthorizedError()
     }
 
