@@ -4,6 +4,7 @@ import { GenerateData } from '@/tests/generate-data'
 import { DeleteParticipantUseCase } from './delete-participant'
 import { InMemoryParticipantsRepository } from '@/repositories/in-memory/in-memory-participants-repository'
 import { NotFoundError } from '@/errors/not-found'
+import { UnauthorizedError } from '@/errors/unauthorized'
 
 describe('DeleteParticipantUseCase', () => {
   let sut: DeleteParticipantUseCase
@@ -43,5 +44,14 @@ describe('DeleteParticipantUseCase', () => {
     const promise = sut.execute({ participantId: 'wrong_id', userId: user.id })
 
     expect(promise).rejects.toBeInstanceOf(NotFoundError)
+  })
+
+  it('should not be able to delete a participant if user id is not valid', async () => {
+    const promise = sut.execute({
+      participantId: participant.id,
+      userId: 'wrong_id',
+    })
+
+    expect(promise).rejects.toBeInstanceOf(UnauthorizedError)
   })
 })
