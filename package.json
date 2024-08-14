@@ -16,6 +16,7 @@
     "@rocketseat/eslint-config": "2.2.2",
     "@types/bcryptjs": "2.4.6",
     "@types/node": "22.0.0",
+    "@types/nodemailer": "6.4.15",
     "@vitest/coverage-v8": "2.0.4",
     "prisma": "5.17.0",
     "tsup": "8.2.3",
@@ -30,6 +31,7 @@
     "dayjs": "1.11.12",
     "dotenv": "16.4.5",
     "fastify": "4.28.1",
+    "nodemailer": "6.9.14",
     "zod": "3.23.8"
   }
 }
