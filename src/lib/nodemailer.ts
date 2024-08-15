@@ -6,10 +6,20 @@ import { GenerateEmail } from '@/helpers/generate-email'
 
 dayjs.locale('pt-br')
 
+const config = {
+  host:
+    env.NODE_ENV !== 'production' ? 'sandbox.smtp.mailtrap.io' : env.SMTP_HOST,
+  port: env.NODE_ENV !== 'production' ? 587 : env.SMTP_PORT,
+  secure: false,
+  auth: {
+    user: env.NODE_ENV !== 'production' ? '8a68e0de3e96c0' : env.SMTP_USER,
+    pass: env.NODE_ENV !== 'production' ? '30fd05a0b4d8f4' : env.SMTP_PASSWORD,
+  },
+}
+
 interface SendEmailParams {
   from?: string
   to: string
-  type: 'OWNER' | 'PARTICIPANT'
   destination: string
   starts_at: Date
   ends_at: Date
@@ -20,51 +30,21 @@ class Nodemailer {
   private transporter: Transporter
 
   constructor() {
-    this.transporter = createTransport({
-      host: env.SMTP_HOST,
-      port: env.SMTP_PORT,
-      secure: false,
-      auth: {
-        user: env.SMTP_USER,
-        pass: env.SMTP_PASSWORD,
-      },
-    })
+    this.transporter = createTransport(config)
   }
 
-  async sendEmail({
+  async confirmTrip({
     from,
     to,
-    type,
     confirmationLink,
     destination,
     ends_at,
     starts_at,
   }: SendEmailParams) {
-    const start_date = `${dayjs(starts_at).date()} de ${dayjs(starts_at).format('MMMM')} de ${dayjs(starts_at).year()}`
-    const end_date = `${dayjs(ends_at).date()} de ${dayjs(ends_at).format('MMMM')} de ${dayjs(ends_at).year()}`
+    try {
+      const start_date = `${dayjs(starts_at).date()} de ${dayjs(starts_at).format('MMMM')} de ${dayjs(starts_at).year()}`
+      const end_date = `${dayjs(ends_at).date()} de ${dayjs(ends_at).format('MMMM')} de ${dayjs(ends_at).year()}`
 
-    if (type === 'PARTICIPANT') {
-      const emailTemplate = GenerateEmail.participant({
-        confirmationLink,
-        destination,
-        end_date,
-        start_date,
-      })
-
-      try {
-        await this.transporter.sendMail({
-          from: from || env.SMTP_USER,
-          to,
-          subject: 'Convite para viagem',
-          html: emailTemplate,
-        })
-      } catch (err) {
-        console.error('Error to send participant e-mail.')
-        console.error(err)
-      }
-    }
-
-    if (type === 'OWNER') {
       const emailTemplate = GenerateEmail.owner({
         confirmationLink,
         destination,
@@ -72,17 +52,46 @@ class Nodemailer {
         start_date,
       })
 
-      try {
-        await this.transporter.sendMail({
-          from: from || env.SMTP_USER,
-          to,
-          subject: 'Convite para viagem',
-          html: emailTemplate,
-        })
-      } catch (err) {
-        console.error('Error to send owner e-mail.')
-        console.error(err)
-      }
+      await this.transporter.sendMail({
+        from: from || env.SMTP_USER,
+        to,
+        subject: 'Confirme sua viagem',
+        html: emailTemplate,
+      })
+    } catch (err) {
+      console.error('Error to send owner e-mail.')
+      console.error(err)
+    }
+  }
+
+  async confirmParticipant({
+    from,
+    to,
+    confirmationLink,
+    destination,
+    ends_at,
+    starts_at,
+  }: SendEmailParams) {
+    try {
+      const start_date = `${dayjs(starts_at).date()} de ${dayjs(starts_at).format('MMMM')} de ${dayjs(starts_at).year()}`
+      const end_date = `${dayjs(ends_at).date()} de ${dayjs(ends_at).format('MMMM')} de ${dayjs(ends_at).year()}`
+
+      const emailTemplate = GenerateEmail.participant({
+        confirmationLink,
+        destination,
+        end_date,
+        start_date,
+      })
+
+      await this.transporter.sendMail({
+        from: from || env.SMTP_USER,
+        to,
+        subject: 'Convite para viagem',
+        html: emailTemplate,
+      })
+    } catch (err) {
+      console.error('Error to send participant e-mail.')
+      console.error(err)
     }
   }
 }

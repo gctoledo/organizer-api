@@ -19,6 +19,7 @@ describe('CreateParticipantsUseCase', () => {
     sut = new CreateParticipantUseCase(
       data.participantsRepository,
       data.tripsRepository,
+      'http://localhost:3333',
     )
     participantsRepository = data.participantsRepository
 

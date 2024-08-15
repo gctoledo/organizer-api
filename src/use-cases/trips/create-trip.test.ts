@@ -11,7 +11,11 @@ describe('CreateTripUseCase', () => {
 
   beforeEach(async () => {
     const data = new GenerateData()
-    sut = new CreateTripUseCase(data.tripsRepository, data.usersRepository)
+    sut = new CreateTripUseCase(
+      data.tripsRepository,
+      data.usersRepository,
+      'http://localhost:3333',
+    )
 
     user = await data.createUser()
   })
