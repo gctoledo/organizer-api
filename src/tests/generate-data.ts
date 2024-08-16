@@ -51,7 +51,7 @@ export class GenerateData {
         userId: this.users[0].id,
       },
       participants: [
-        { email: 'john@doe.com', owner: true },
+        { email: 'john@doe.com', owner: true, is_confirmed: true },
         { email: 'albert@doe.com', owner: false },
         { email: 'robert@doe.com', owner: false },
       ],

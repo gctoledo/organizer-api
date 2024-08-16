@@ -13,11 +13,7 @@ export type TripDetailsResponse = Prisma.TripGetPayload<{
   }
 }>
 
-export interface ParticipantParams {
-  first_name?: string
-  email: string
-  owner: boolean
-}
+export type ParticipantParams = Prisma.ParticipantCreateWithoutTripInput
 
 export interface CreateTripParams {
   data: Prisma.TripUncheckedCreateInput

@@ -62,8 +62,8 @@ export class InMemoryTripsRepository implements TripRepository {
       tripId: trip.id,
       email: participant.email,
       first_name: participant.first_name ?? null,
-      is_confirmed: participant.owner,
-      owner: participant.owner,
+      is_confirmed: participant.is_confirmed ?? false,
+      owner: participant.owner ?? false,
     }))
 
     const _participants =

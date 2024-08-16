@@ -43,10 +43,16 @@ export class CreateTripUseCase {
     }
 
     const participants = [
-      { email: owner.email, first_name: owner.first_name, owner: true },
+      {
+        email: owner.email,
+        first_name: owner.first_name,
+        owner: true,
+        is_confirmed: true,
+      },
       ...participants_to_invite.map((participantEmail) => ({
         email: participantEmail,
         owner: false,
+        is_confirmed: false,
       })),
     ]
 
