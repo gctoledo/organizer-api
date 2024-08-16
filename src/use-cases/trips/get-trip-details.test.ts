@@ -27,13 +27,12 @@ describe('GetTripUseCase', () => {
       expect.objectContaining({
         destination: 'New York',
         userId: user.id,
-        participants: expect.arrayContaining([
+        Participant: expect.arrayContaining([
           expect.objectContaining({
             email: 'albert@doe.com',
             owner: false,
           }),
         ]),
-        links: [],
       }),
     )
   })
@@ -48,7 +47,7 @@ describe('GetTripUseCase', () => {
       expect.objectContaining({
         destination: 'New York',
         userId: user.id,
-        participants: expect.arrayContaining([
+        Participant: expect.arrayContaining([
           expect.objectContaining({
             email: 'albert@doe.com',
             owner: false,

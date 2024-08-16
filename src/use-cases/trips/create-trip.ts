@@ -73,9 +73,8 @@ export class CreateTripUseCase {
     })
 
     await Promise.all(
-      trip.participants
-        .filter((participant) => participant.owner === false)
-        .map(async (participant) => {
+      trip.Participant.filter((participant) => participant.owner === false).map(
+        async (participant) => {
           const confirmationLink = generateLink.participant(participant.id)
 
           await nodemailer.confirmParticipant({
@@ -85,7 +84,8 @@ export class CreateTripUseCase {
             starts_at: trip.starts_at,
             to: participant.email,
           })
-        }),
+        },
+      ),
     )
 
     return { trip }

@@ -1,10 +1,17 @@
-import { Activity, Link, Participant, Prisma, Trip } from '@prisma/client'
+import { Prisma, Trip } from '@prisma/client'
 
-export type TripResponse = Trip & { participants: Participant[] }
-export type TripDetailsResponse = TripResponse & {
-  links: Link[]
-  activities: Activity[]
-}
+export type TripResponse = Prisma.TripGetPayload<{
+  include: {
+    Participant: true
+  }
+}>
+export type TripDetailsResponse = Prisma.TripGetPayload<{
+  include: {
+    Participant: true
+    Activity: true
+    Link: true
+  }
+}>
 
 export interface ParticipantParams {
   first_name?: string
@@ -24,7 +31,7 @@ export interface UpdateTripParams {
 
 export interface TripRepository {
   findById(id: string): Promise<TripDetailsResponse | null>
-  findByUserId(userId: string): Promise<TripResponse[]>
+  findByUserId(userId: string): Promise<Trip[]>
   confirm(id: string): Promise<void>
   create(data: CreateTripParams): Promise<TripResponse>
   delete(id: string): Promise<void>

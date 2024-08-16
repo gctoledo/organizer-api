@@ -20,7 +20,7 @@ describe('ConfirmParticipantUseCase', () => {
     const createdTrip = await data.createTrip()
 
     trip = createdTrip
-    participants = createdTrip.participants
+    participants = createdTrip.Participant
   })
 
   it('should be able to confirm participant', async () => {

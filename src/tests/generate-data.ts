@@ -102,6 +102,8 @@ export class GenerateData {
       }),
     )
 
+    this.trips.push(...trips)
+
     return trips
   }
 

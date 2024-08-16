@@ -19,7 +19,7 @@ export class GetTripDetailsUseCase {
 
     const authorization =
       trip.userId === credential ||
-      trip.participants.some((participant) => participant.email === credential)
+      trip.Participant.some((participant) => participant.email === credential)
 
     if (!authorization) {
       throw new UnauthorizedError()

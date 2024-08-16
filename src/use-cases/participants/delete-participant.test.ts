@@ -25,9 +25,9 @@ describe('DeleteParticipantUseCase', () => {
 
     const trip = await data.createTrip()
 
-    owner = trip.participants[0]
+    owner = trip.Participant[0]
 
-    participant = trip.participants[1]
+    participant = trip.Participant[1]
   })
 
   it('should be able to delete a participant', async () => {

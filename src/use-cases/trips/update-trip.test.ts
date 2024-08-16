@@ -33,7 +33,7 @@ describe('UpdateTripUseCase', () => {
       ...trip,
       destination: 'Los Angeles',
       starts_at: new Date('2030-05-20T00:00:00.000Z'),
-      participants: undefined,
+      Participant: undefined,
     })
   })
 

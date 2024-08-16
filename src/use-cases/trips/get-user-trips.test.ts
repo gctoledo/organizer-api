@@ -24,19 +24,9 @@ describe('GetUserTripsUseCase', () => {
       expect.arrayContaining([
         expect.objectContaining({
           destination: 'New York',
-          participants: expect.arrayContaining([
-            expect.objectContaining({
-              email: 'albert@doe.com',
-            }),
-          ]),
         }),
         expect.objectContaining({
           destination: 'Los Angeles',
-          participants: expect.arrayContaining([
-            expect.objectContaining({
-              email: 'john@doe.com',
-            }),
-          ]),
         }),
       ]),
     )

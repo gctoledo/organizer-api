@@ -29,9 +29,9 @@ describe('CreateTripUseCase', () => {
       participants_to_invite: ['albert@doe.com', 'robert@doe.com'],
     })
 
-    expect(trip.participants).toHaveLength(3)
+    expect(trip.Participant).toHaveLength(3)
     expect(trip.destination).toEqual('New York')
-    expect(trip.participants).toEqual(
+    expect(trip.Participant).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           email: user.email,

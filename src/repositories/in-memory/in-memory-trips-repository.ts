@@ -33,29 +33,16 @@ export class InMemoryTripsRepository implements TripRepository {
 
     return {
       ...trip,
-      participants,
-      links,
-      activities,
+      Participant: participants,
+      Link: links,
+      Activity: activities,
     }
   }
 
   async findByUserId(userId: string) {
     const trips = this.trips.filter((trip) => trip.userId === userId)
 
-    const tripsWParticipants = await Promise.all(
-      trips.map(async (trip) => {
-        const participants = await this.participantsRepository.findByTripId(
-          trip.id,
-        )
-
-        return {
-          ...trip,
-          participants,
-        }
-      }),
-    )
-
-    return tripsWParticipants
+    return trips
   }
 
   async create({ data, participants }: CreateTripParams) {
@@ -84,7 +71,7 @@ export class InMemoryTripsRepository implements TripRepository {
 
     return {
       ...trip,
-      participants: _participants,
+      Participant: _participants,
     }
   }
 
