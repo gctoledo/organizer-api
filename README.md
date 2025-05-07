@@ -6,8 +6,6 @@ Dei o nome de Organiz.er para a aplicação porque apesar de ser 100% inspirado 
 
 A aplicação consiste em uma RESTful API de um sistema de gerenciador de viagem. O usuário pode se cadastrar, criar viagens, convidar novos participantes, criar novas atividades, entre outras funcionalidades. O projeto foi criado com Node.js, utilizando Fastify, Typescript, Vitest, Prisma, Zod, Nodemailer, entre outras ótimas tecnologias. Utiliza autenticação baseado em JWT, junto com um sistema de refresh token para revalidação de acesso. Os participantes convidados não precisam ter conta para serem convidados, sendo esse processo feito e validado por envio de e-mail para confirmação do participante utilizando Nodemailer.
 
-### `🛠 EM DESENVOLVIMENTO`
-
 #
 
 ### 🔨 Guia de instalação
