@@ -1,9 +1,5 @@
 # Organiz.er API
 
-Há um tempo a Rocketseat fez um evento onde desenvolveram uma aplicação fullstack chamada Plann.er. Eu acompanhei o evento e achei a ideia do projeto bem divertida, além do design da aplicação web ser incrível. E claro, eu fiquei com muita vontade de desenvolver.
-
-Dei o nome de Organiz.er para a aplicação porque apesar de ser 100% inspirado no projeto da Rocketseat, além do layout disponibilizado no Figma, todo restante foi desenvolvido e projetado por mim.
-
 A aplicação consiste em uma RESTful API de um sistema de gerenciador de viagem. O usuário pode se cadastrar, criar viagens, convidar novos participantes, criar novas atividades, entre outras funcionalidades. O projeto foi criado com Node.js, utilizando Fastify, Typescript, Vitest, Prisma, Zod, Nodemailer, entre outras ótimas tecnologias. Utiliza autenticação baseado em JWT, junto com um sistema de refresh token para revalidação de acesso. Os participantes convidados não precisam ter conta para serem convidados, sendo esse processo feito e validado por envio de e-mail para confirmação do participante utilizando Nodemailer.
 
 #
